@@ -41,8 +41,10 @@ public  class JWTServiceImpl implements JWTService{
     @Override
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
-
     return Jwts.builder()
+            .header()
+            .type("JWT")
+            .and()
             .claims()
             .add(claims)
             .subject(username)
