@@ -32,7 +32,8 @@ public  class JWTServiceImpl implements JWTService{
        }
     }
 
-    private   SecretKey getKey() {
+    @Override
+    public SecretKey getKey() {
         byte [] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
@@ -60,12 +61,14 @@ public  class JWTServiceImpl implements JWTService{
         return extractClaim(token, Claims::getSubject);
     }
 
-    private <T> T extractClaim(String token, Function<Claims, T> claimResolver){
+    @Override
+    public <T> T extractClaim(String token, Function<Claims, T> claimResolver){
         final Claims claims = extractAllClaims(token);
         return claimResolver.apply(claims);
     }
 
-    private Claims extractAllClaims(String token){
+    @Override
+    public Claims extractAllClaims(String token){
         return Jwts.parser()
                 .verifyWith(getKey())
                 .build()
@@ -79,11 +82,14 @@ public  class JWTServiceImpl implements JWTService{
         return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    private boolean isTokenExpired(String token) {
+
+    @Override
+    public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
-    private Date extractExpiration(String token) {
+    @Override
+    public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
